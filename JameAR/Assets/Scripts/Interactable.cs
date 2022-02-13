@@ -5,7 +5,7 @@ using UnityEngine;
 
 interface Interactable
 {
-    void OnPlayerNear();
-    void OnPlayerFar();
-    void OnPlayerInteract();
+    void OnPlayerNear(Transform player);
+    void OnPlayerFar(Transform player);
+    bool OnPlayerInteract(Transform player);
 }

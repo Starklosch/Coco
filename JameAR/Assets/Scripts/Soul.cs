@@ -7,19 +7,21 @@ public class Soul : MonoBehaviour, Interactable
 
     [SerializeField] GameObject showInteraction;
 
-    public void OnPlayerFar()
+    public void OnPlayerFar(Transform player)
     {
         showInteraction.SetActive(false);
     }
 
-    public void OnPlayerInteract()
+    public bool OnPlayerInteract(Transform player)
     {
         // Interaction
 
         Destroy(gameObject);
+
+        return true;
     }
 
-    public void OnPlayerNear()
+    public void OnPlayerNear(Transform player)
     {
         showInteraction.SetActive(true);
     }
