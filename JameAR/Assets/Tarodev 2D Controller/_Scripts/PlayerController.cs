@@ -75,6 +75,11 @@ namespace TarodevController {
         [SerializeField] private float _edgeDetectionThreshold = 0.5f;
         [SerializeField] private float edgeDetectionOffset = .028f;
 
+        public Bounds Bounds
+        {
+            get => _characterBounds;
+        }
+
         private RayRange _raysUp, _raysRight, _raysDown, _raysLeft, _raysDownExtended;
         private bool _colUp, _colRight, _colDown, _colLeft, _colDownExtended;
 
@@ -139,7 +144,16 @@ namespace TarodevController {
 
         bool RunDetection(RayRange range)
         {
-            return range.EvaluateRayPositions(_detectorCount).Any(point => Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer));
+            return range.EvaluateRayPositions(_detectorCount).Any(point => {
+                var hit = Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer);
+                if (!hit)
+                    return false;
+
+                if (!hit.collider)
+                    return false;
+
+                return !hit.collider.isTrigger;
+            });
         }
 
         bool RunDetection(RayRange range, int detectorCount, out List<RaycastHit2D> hits, out RaycastHit2D? nearestHit)
@@ -152,19 +166,25 @@ namespace TarodevController {
             foreach (var point in range.EvaluateRayPositions(detectorCount))
             {
                 var hit = Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer);
-                if (hit)
+                if (!hit)
+                    continue;
+
+                if (!hit.collider)
+                    continue;
+
+                if (hit.collider.isTrigger)
+                    continue;
+
+                _result = true;
+                var hitDistance = Vector2.Distance(hit.point, transform.position);
+
+                if (!_nearestHit.HasValue || nearestDistance > hitDistance)
                 {
-                    _result = true;
-                    var hitDistance = Vector2.Distance(hit.point, transform.position);
-
-                    if (!_nearestHit.HasValue || nearestDistance > hitDistance)
-                    {
-                        _nearestHit = hit;
-                        nearestDistance = hitDistance;
-                    }
-
-                    _hitList.Add(hit);
+                    _nearestHit = hit;
+                    nearestDistance = hitDistance;
                 }
+
+                _hitList.Add(hit);
             }
 
             nearestHit = _nearestHit;
@@ -363,7 +383,7 @@ namespace TarodevController {
 
             // check furthest movement. If nothing hit, move and don't do extra checks
             var hit = Physics2D.OverlapBox(furthestPoint, _characterBounds.size, 0, _groundLayer);
-            if (!hit) {
+            if (!hit || hit.isTrigger) {
                 transform.position += move;
                 return;
             }
@@ -375,7 +395,8 @@ namespace TarodevController {
                 var t = (float)i / _freeColliderIterations;
                 var posToTry = Vector2.Lerp(pos, furthestPoint, t);
 
-                if (Physics2D.OverlapBox(posToTry, _characterBounds.size, 0, _groundLayer)) {
+                var overlap = Physics2D.OverlapBox(posToTry, _characterBounds.size, 0, _groundLayer);
+                if (overlap && !overlap.isTrigger) {
                     transform.position = positionToMoveTo;
 
                     // We've landed on a corner or hit our head on a ledge. Nudge the player gently
