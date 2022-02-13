@@ -17,6 +17,9 @@ TextureImporter:
   - first:
       213: -8958812850186405424
     second: tiles plataformas_4
+  - first:
+      213: 4718312750814347368
+    second: tiles plataformas_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -109,10 +112,10 @@ TextureImporter:
       name: tiles plataformas_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 166
-        height: 252
+        x: 6
+        y: 312
+        width: 788
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,10 +133,10 @@ TextureImporter:
       name: tiles plataformas_1
       rect:
         serializedVersion: 2
-        x: 210
-        y: 0
-        width: 450
-        height: 252
+        x: 840
+        y: 316
+        width: 577
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -151,10 +154,10 @@ TextureImporter:
       name: tiles plataformas_2
       rect:
         serializedVersion: 2
-        x: 715
-        y: 0
-        width: 696
-        height: 252
+        x: 0
+        y: 158
+        width: 421
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -172,10 +175,10 @@ TextureImporter:
       name: tiles plataformas_3
       rect:
         serializedVersion: 2
-        x: 1522
-        y: 0
-        width: 1151
-        height: 252
+        x: 447
+        y: 160
+        width: 590
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,10 +196,10 @@ TextureImporter:
       name: tiles plataformas_4
       rect:
         serializedVersion: 2
-        x: 2706
-        y: 0
-        width: 286
-        height: 252
+        x: 1101
+        y: 157
+        width: 231
+        height: 129
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,6 +209,27 @@ TextureImporter:
       bones: []
       spriteID: 0d93f67bd27eba380800000000000000
       internalID: -8958812850186405424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tiles plataformas_5
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 0
+        width: 1413
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8604c7bb270da7140800000000000000
+      internalID: 4718312750814347368
       vertices: []
       indices: 
       edges: []
