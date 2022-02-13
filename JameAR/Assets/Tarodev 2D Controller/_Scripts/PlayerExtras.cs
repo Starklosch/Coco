@@ -31,6 +31,15 @@ namespace TarodevController {
             Dir = dir;
         }
 
+        public IEnumerable<Vector2> EvaluateRayPositions(int detectorCount)
+        {
+            for (var i = 0; i < detectorCount; i++)
+            {
+                var t = (float)i / (detectorCount - 1);
+                yield return Vector2.Lerp(Start, End, t);
+            }
+        }
+
         public readonly Vector2 Start, End, Dir;
     }
 }

@@ -26,7 +26,11 @@ namespace TarodevController {
         private bool _active;
         void Awake() => Invoke(nameof(Activate), 0.5f);
         void Activate() =>  _active = true;
-        
+        private void Start()
+        {
+            Time.timeScale = 0.8f;
+        }
+
         private void Update() {
             if(!_active) return;
             // Calculate velocity
@@ -67,11 +71,37 @@ namespace TarodevController {
         [SerializeField] private int _detectorCount = 3;
         [SerializeField] private float _detectionRayLength = 0.1f;
         [SerializeField] [Range(0.1f, 0.3f)] private float _rayBuffer = 0.1f; // Prevents side detectors hitting the ground
+        [SerializeField] private float _edgeDetection = 0.3f;
+        [SerializeField] private float _edgeDetectionThreshold = 0.5f;
+        [SerializeField] private float edgeDetectionOffset = .028f;
 
-        private RayRange _raysUp, _raysRight, _raysDown, _raysLeft;
-        private bool _colUp, _colRight, _colDown, _colLeft;
+        private RayRange _raysUp, _raysRight, _raysDown, _raysLeft, _raysDownExtended;
+        private bool _colUp, _colRight, _colDown, _colLeft, _colDownExtended;
 
         private float _timeLeftGrounded;
+        List<RaycastHit2D> hitsDownExtended;
+        RaycastHit2D? nearestHitDown;
+        RaycastHit2D? lastHitDown;
+
+        //bool EdgeDetection => !_colDown && (_timeLeftGrounded + _edgeDetectionThreshold < Time.time);
+
+        bool EdgeDetection
+        {
+            get
+            {
+                if (_colDown)
+                    return false;
+
+                if (Time.time < _timeLeftGrounded + _edgeDetectionThreshold)
+                    return false;
+
+                //Debug.Log($"Edge. Nearest: {nearestHitDown?.collider}, Last: {lastHitDown?.collider}");
+                if (nearestHitDown == null || lastHitDown == null)
+                    return false;
+
+                return !Equals(nearestHitDown?.collider, lastHitDown?.collider);
+            }
+        }
 
         // We use these raycast checks for pre-collision information
         private void RunCollisionChecks() {
@@ -80,9 +110,11 @@ namespace TarodevController {
 
             // Ground
             LandingThisFrame = false;
-            var groundedCheck = RunDetection(_raysDown);
+            var groundedCheck = RunDetection(_raysDown, _detectorCount, out hitsDownExtended, out nearestHitDown);
+
             if (_colDown && !groundedCheck) _timeLeftGrounded = Time.time; // Only trigger when first leaving
-            else if (!_colDown && groundedCheck) {
+            else if (!_colDown  && groundedCheck)
+            {
                 _coyoteUsable = true; // Only trigger when first touching
                 LandingThisFrame = true;
             }
@@ -94,27 +126,63 @@ namespace TarodevController {
             _colLeft = RunDetection(_raysLeft);
             _colRight = RunDetection(_raysRight);
 
-            bool RunDetection(RayRange range) {
-                return EvaluateRayPositions(range).Any(point => Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer));
+            if (groundedCheck)
+            {
+                _colDownExtended = false;
+                lastHitDown = nearestHitDown;
             }
+            else
+                _colDownExtended = RunDetection(_raysDownExtended, 2, out hitsDownExtended, out nearestHitDown);
         }
+
+        #region Detections
+
+        bool RunDetection(RayRange range)
+        {
+            return range.EvaluateRayPositions(_detectorCount).Any(point => Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer));
+        }
+
+        bool RunDetection(RayRange range, int detectorCount, out List<RaycastHit2D> hits, out RaycastHit2D? nearestHit)
+        {
+            var _hitList = new List<RaycastHit2D>();
+            RaycastHit2D? _nearestHit = null;
+            var _result = false;
+
+            float nearestDistance = 0;
+            foreach (var point in range.EvaluateRayPositions(detectorCount))
+            {
+                var hit = Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer);
+                if (hit)
+                {
+                    _result = true;
+                    var hitDistance = Vector2.Distance(hit.point, transform.position);
+
+                    if (!_nearestHit.HasValue || nearestDistance > hitDistance)
+                    {
+                        _nearestHit = hit;
+                        nearestDistance = hitDistance;
+                    }
+
+                    _hitList.Add(hit);
+                }
+            }
+
+            nearestHit = _nearestHit;
+            hits = _hitList;
+            return _result;
+        }
+
+        #endregion
 
         private void CalculateRayRanged() {
             // This is crying out for some kind of refactor. 
             var b = new Bounds(transform.position, _characterBounds.size);
 
+            _raysDownExtended = new RayRange(b.min.x + _rayBuffer - _edgeDetection, b.min.y, b.max.x - _rayBuffer + _edgeDetection, b.min.y, Vector2.down);
             _raysDown = new RayRange(b.min.x + _rayBuffer, b.min.y, b.max.x - _rayBuffer, b.min.y, Vector2.down);
             _raysUp = new RayRange(b.min.x + _rayBuffer, b.max.y, b.max.x - _rayBuffer, b.max.y, Vector2.up);
             _raysLeft = new RayRange(b.min.x, b.min.y + _rayBuffer, b.min.x, b.max.y - _rayBuffer, Vector2.left);
             _raysRight = new RayRange(b.max.x, b.min.y + _rayBuffer, b.max.x, b.max.y - _rayBuffer, Vector2.right);
-        }
-
-
-        private IEnumerable<Vector2> EvaluateRayPositions(RayRange range) {
-            for (var i = 0; i < _detectorCount; i++) {
-                var t = (float)i / (_detectorCount - 1);
-                yield return Vector2.Lerp(range.Start, range.End, t);
-            }
         }
 
         private void OnDrawGizmos() {
@@ -125,13 +193,14 @@ namespace TarodevController {
             // Rays
             if (!Application.isPlaying) {
                 CalculateRayRanged();
-                Gizmos.color = Color.blue;
-                foreach (var range in new List<RayRange> { _raysUp, _raysRight, _raysDown, _raysLeft }) {
-                    foreach (var point in EvaluateRayPositions(range)) {
-                        Gizmos.DrawRay(point, range.Dir * _detectionRayLength);
-                    }
-                }
             }
+
+            foreach (var range in new List<RayRange> { _raysUp, _raysRight, _raysDown, _raysLeft })
+            {
+                DrawRays(range, _detectorCount);
+            }
+            
+            DrawRays(_raysDownExtended, 2);
 
             if (!Application.isPlaying) return;
 
@@ -139,10 +208,25 @@ namespace TarodevController {
             Gizmos.color = Color.red;
             var move = new Vector3(_currentHorizontalSpeed, _currentVerticalSpeed) * Time.deltaTime;
             Gizmos.DrawWireCube(transform.position + move, _characterBounds.size);
+
+        }
+
+        void DrawRays(RayRange range, int detectorCount)
+        {
+            foreach (var point in range.EvaluateRayPositions(detectorCount))
+            {
+                var check = Physics2D.Raycast(point, range.Dir, _detectionRayLength, _groundLayer);
+
+                if (check)
+                    Gizmos.color = Color.red;
+                else
+                    Gizmos.color = Color.green;
+
+                Gizmos.DrawRay(point, range.Dir * _detectionRayLength);
+            }
         }
 
         #endregion
-
 
         #region Walk
 
@@ -184,9 +268,20 @@ namespace TarodevController {
         private float _fallSpeed;
 
         private void CalculateGravity() {
+
             if (_colDown) {
                 // Move out of the ground
                 if (_currentVerticalSpeed < 0) _currentVerticalSpeed = 0;
+            }
+            else if (_colDownExtended && EdgeDetection)
+            {
+                if (_currentVerticalSpeed < 0) _currentVerticalSpeed = 0;
+
+                if (nearestHitDown.HasValue)
+                {
+                    var y = nearestHitDown.Value.collider.bounds.max.y + _characterBounds.size.y / 2 + edgeDetectionOffset;
+                    transform.position = new Vector2(transform.position.x, y);
+                }
             }
             else {
                 // Add downward force while ascending if we ended the jump early
