@@ -9,26 +9,39 @@ public class Door : MonoBehaviour, SoulPower
 
     [SerializeField]
     GameObject openDoor;
+    [SerializeField]
     GameObject closedDoor;
+    [SerializeField]
+    Collider2D col;
 
     public bool Open { get => open; set => open = value; }
 
     void Start()
     {
         open = false;
+        if (!col)
+            col = GetComponent<Collider2D>();
     }
 
     void Update()
     {
         if (open)
         {
-            closedDoor.SetActive(false);
-            openDoor.SetActive(true);
+            if (closedDoor != null)
+                closedDoor.SetActive(false);
+            if (openDoor != null)
+                openDoor.SetActive(true);
+
+            col.enabled = false;
         }
         else
         {
-            openDoor.SetActive(false);
-            closedDoor.SetActive(true);
+            if (openDoor != null)
+                openDoor.SetActive(false);
+            if (closedDoor != null)
+                closedDoor.SetActive(true);
+
+            col.enabled = true;
         }
     }
 
