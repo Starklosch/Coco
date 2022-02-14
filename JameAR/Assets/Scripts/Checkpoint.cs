@@ -8,8 +8,36 @@ public class Checkpoint : MonoBehaviour, Interactable
 
     [SerializeField]
     CheckpointType type;
+    [SerializeField]
+    bool makeDefault;
 
     public CheckpointType Type { get => type; }
+
+    private void Awake()
+    {
+        if (!makeDefault)
+            return;
+
+        switch (type)
+        {
+            case CheckpointType.Mortal:
+                if (ActiveMortal)
+                {
+                    Debug.LogWarning("Active checkpoint already set. May be there is another Checkpoint set to default");
+                    return;
+                }
+                ActiveMortal = this;
+                break;
+            case CheckpointType.Hell:
+                if (ActiveHell)
+                {
+                    Debug.LogWarning("Active checkpoint already set. May be there is another Checkpoint set to default");
+                    return;
+                }
+                ActiveHell = this;
+                break;
+        }
+    }
 
     public void OnPlayerFar(Transform player)
     {

@@ -107,6 +107,8 @@ public class InteractionManager : MonoBehaviour
                     soulVersion.SetActive(false);
                     aliveVersion.SetActive(true);
                 }
+
+                PlayerRespawn.Instance.Respawn();
             }
         }
 
