@@ -6,11 +6,17 @@ public class Soul : MonoBehaviour, Interactable
 {
 
     [SerializeField] GameObject showInteraction;
-    [SerializeField] SoulPower target;
+    [SerializeField] GameObject target;
+
+    SoulPower soulPower;
 
     private void Start()
     {
         showInteraction.SetActive(false);
+
+        soulPower = target.GetComponent<SoulPower>();
+        if (!target || soulPower == null)
+            Debug.LogWarning("Unrecognized soul power");
     }
 
     public void OnPlayerFar(Transform player)
@@ -21,8 +27,8 @@ public class Soul : MonoBehaviour, Interactable
     public bool OnPlayerInteract(Transform player)
     {
         // Interaction
-        if (target != null)
-            target.OnSoulCollected();
+        if (soulPower != null)
+            soulPower.OnSoulCollected();
 
         Destroy(gameObject);
 

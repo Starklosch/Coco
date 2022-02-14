@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd0f3c050ddd2c43920c54cd3443790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powered: 1
+  powered: 0
   movable: {fileID: 1619062733272207968}
   startRelative: {x: -1.44, y: 0}
   endRelative: {x: 3.51, y: 0}
