@@ -6,6 +6,7 @@ public class Soul : MonoBehaviour, Interactable
 {
 
     [SerializeField] GameObject showInteraction;
+    [SerializeField] SoulPower target;
 
     private void Start()
     {
@@ -20,6 +21,8 @@ public class Soul : MonoBehaviour, Interactable
     public bool OnPlayerInteract(Transform player)
     {
         // Interaction
+        if (target != null)
+            target.OnSoulCollected();
 
         Destroy(gameObject);
 

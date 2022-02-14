@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Platform : MonoBehaviour
+public class Platform : MonoBehaviour, SoulPower
 {
 
     public bool Powered => powered;
@@ -36,7 +36,6 @@ public class Platform : MonoBehaviour
             moveCorutine = StartCoroutine(Movement());
         else if (!powered && moveCorutine != null)
             StopCoroutine(moveCorutine);
-
     }
 
     private void OnDrawGizmos()
@@ -68,5 +67,10 @@ public class Platform : MonoBehaviour
             savedState = i;
             yield return null;
         }
+    }
+
+    public void OnSoulCollected()
+    {
+        powered = true;
     }
 }
