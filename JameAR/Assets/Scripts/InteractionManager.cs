@@ -2,21 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactions : MonoBehaviour
+public class InteractionManager : MonoBehaviour
 {
     [SerializeField]
     string interactable;
     [SerializeField]
     Bounds bounds;
     [SerializeField]
-    private KeyCode ability = KeyCode.F;
+    KeyCode ability = KeyCode.F;
+    [SerializeField]
+    bool isSoul;
+
+    public bool IsSoul
+    {
+        get => isSoul;
+    }
+
+    static InteractionManager _instance;
+    public static InteractionManager Instance
+    {
+        get => _instance;
+    }
 
     List<Collider2D> _colliders = new List<Collider2D>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (_instance)
+        {
+            Destroy(this);
+            return;
+        }
+
+        _instance = this;
     }
 
     // Update is called once per frame
@@ -60,20 +79,29 @@ public class Interactions : MonoBehaviour
             }
         }
 
-        filteredColliders.Sort(Comparer);
+        filteredColliders.Sort(DistanceComparer);
 
-        if (Input.GetKeyDown(ability) && filteredColliders.Count > 0)
+        if (Input.GetKeyDown(ability))
+        {
+            var handled = false;
             foreach (var item in filteredColliders)
             {
-                var handled = item.GetComponent<Interactable>().OnPlayerInteract(transform);
+                handled = item.GetComponent<Interactable>().OnPlayerInteract(transform);
                 if (handled)
                     break;
             }
-        
+
+            // World switch
+            if (!handled)
+            {
+                Debug.Log("Switch");
+            }
+        }
+
         _colliders = filteredColliders;
     }
 
-    int Comparer(Collider2D a, Collider2D b)
+    int DistanceComparer(Component a, Component b)
     {
         var distanceA = Vector2.Distance(a.transform.position, transform.position);
         var distanceB = Vector2.Distance(b.transform.position, transform.position);

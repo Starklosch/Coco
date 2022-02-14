@@ -20,7 +20,6 @@ namespace TarodevController {
         public bool Grounded => _colDown;
 
         private Vector3 _lastPosition;
-        private Vector3 _lastSafePosition;
         private float _currentHorizontalSpeed, _currentVerticalSpeed;
 
         // This is horrible, but for some reason colliders are not fully established when update starts...
@@ -47,8 +46,6 @@ namespace TarodevController {
             CalculateJump(); // Possibly overrides vertical
 
             MoveCharacter(); // Actually perform the axis movement
-
-            _lastSafePosition = transform.position;
         }
 
 
@@ -135,7 +132,7 @@ namespace TarodevController {
             _colRight = RunDetection(_raysRight);
 
             if (_colLeft || _colRight)
-                transform.position = _lastSafePosition;
+                transform.position = _lastPosition;
 
             if (groundedCheck)
             {
