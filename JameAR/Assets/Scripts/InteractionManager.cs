@@ -5,13 +5,15 @@ using UnityEngine;
 public class InteractionManager : MonoBehaviour
 {
     [SerializeField]
-    string interactable;
+    LayerMask mask;
     [SerializeField]
     Bounds bounds;
     [SerializeField]
     KeyCode ability = KeyCode.F;
     [SerializeField]
     bool isSoul;
+    [SerializeField]
+    GameObject aliveVersion, soulVersion;
 
     public bool IsSoul
     {
@@ -43,7 +45,7 @@ public class InteractionManager : MonoBehaviour
     {
         var min = transform.position + bounds.min;
         var max = transform.position + bounds.max;
-        var colliders = new List<Collider2D>(Physics2D.OverlapAreaAll(min, max));
+        var colliders = new List<Collider2D>(Physics2D.OverlapAreaAll(min, max, mask));
         var filteredColliders = new List<Collider2D>();
         //Interactable closestInteractable = null;
 
@@ -94,7 +96,17 @@ public class InteractionManager : MonoBehaviour
             // World switch
             if (!handled)
             {
-                Debug.Log("Switch");
+                isSoul = !isSoul;
+                if (isSoul)
+                {
+                    aliveVersion.SetActive(false);
+                    soulVersion.SetActive(true);
+                }
+                else
+                {
+                    soulVersion.SetActive(false);
+                    aliveVersion.SetActive(true);
+                }
             }
         }
 

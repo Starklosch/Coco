@@ -35,7 +35,6 @@ namespace TarodevController {
             if(!_active) return;
             // Calculate velocity
             Velocity = (transform.position - _lastPosition) / Time.deltaTime;
-            _lastPosition = transform.position;
 
             GatherInput();
             RunCollisionChecks();
@@ -46,6 +45,8 @@ namespace TarodevController {
             CalculateJump(); // Possibly overrides vertical
 
             MoveCharacter(); // Actually perform the axis movement
+
+            _lastPosition = transform.position;
         }
 
 
@@ -131,8 +132,8 @@ namespace TarodevController {
             _colLeft = RunDetection(_raysLeft);
             _colRight = RunDetection(_raysRight);
 
-            if (_colLeft || _colRight)
-                transform.position = _lastPosition;
+            if (Physics2D.OverlapBox(transform.position, _characterBounds.size, 0, _groundLayer))
+                transform.position = new Vector2(_lastPosition.x, transform.position.y);
 
             if (groundedCheck)
             {
