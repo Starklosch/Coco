@@ -43,6 +43,10 @@ public class InteractionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var mat = Matrix4x4.Scale(transform.localScale);
+        var bounds = this.bounds;
+        bounds.size = mat * bounds.size;
+
         var min = transform.position + bounds.min;
         var max = transform.position + bounds.max;
         var colliders = new List<Collider2D>(Physics2D.OverlapAreaAll(min, max, mask));
@@ -131,6 +135,10 @@ public class InteractionManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        var mat = Matrix4x4.Scale(transform.localScale);
+        var bounds = this.bounds;
+        bounds.size = mat * bounds.size;
+
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(transform.position + bounds.center, bounds.size);
     }

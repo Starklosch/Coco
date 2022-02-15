@@ -1734,14 +1734,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Puerta
       objectReference: {fileID: 0}
-    - target: {fileID: 9135886235855487739, guid: d30ed6ee4b926e949bd8340505e48d61, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.51
-      objectReference: {fileID: 0}
-    - target: {fileID: 9135886235855487739, guid: d30ed6ee4b926e949bd8340505e48d61, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.66
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d30ed6ee4b926e949bd8340505e48d61, type: 3}
 --- !u!1001 &6619474667904876437

@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: 5ecec72957fb2af4da388530b9ac3999
   - enabled: 1
-    path: Assets/Scenes/Stark.unity
-    guid: 807c2ee1b421d724a990244317463a60
+    path: Assets/Scenes/Nivel.unity
+    guid: 6948aa67088a08c4b976b8a42a485ec3
   m_configObjects: {}

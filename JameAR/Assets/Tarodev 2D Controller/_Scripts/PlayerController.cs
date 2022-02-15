@@ -67,7 +67,7 @@ namespace TarodevController {
 
         #region Collisions
 
-        [Header("COLLISION")] [SerializeField] private Bounds _characterBounds;
+        [Header("COLLISION")] [SerializeField] private Bounds characterBounds;
         [SerializeField] private LayerMask _groundLayer;
         [SerializeField] private int _detectorCount = 3;
         [SerializeField] private float _detectionRayLength = 0.1f;
@@ -78,7 +78,7 @@ namespace TarodevController {
 
         public Bounds Bounds
         {
-            get => _characterBounds;
+            get => characterBounds;
         }
 
         private RayRange _raysUp, _raysRight, _raysDown, _raysLeft, _raysDownExtended;
@@ -132,7 +132,7 @@ namespace TarodevController {
             _colLeft = RunDetection(_raysLeft);
             _colRight = RunDetection(_raysRight);
 
-            if (Physics2D.OverlapBox(transform.position, _characterBounds.size, 0, _groundLayer))
+            if (Physics2D.OverlapBox(transform.position, characterBounds.size, 0, _groundLayer))
                 transform.position = new Vector2(_lastPosition.x, transform.position.y);
 
             if (groundedCheck)
@@ -200,7 +200,7 @@ namespace TarodevController {
 
         private void CalculateRayRanged() {
             // This is crying out for some kind of refactor. 
-            var b = new Bounds(transform.position, _characterBounds.size);
+            var b = new Bounds(transform.position, characterBounds.size);
 
             _raysDownExtended = new RayRange(b.min.x + _rayBuffer - _edgeDetection, b.min.y, b.max.x - _rayBuffer + _edgeDetection, b.min.y, Vector2.down);
             _raysDown = new RayRange(b.min.x + _rayBuffer, b.min.y, b.max.x - _rayBuffer, b.min.y, Vector2.down);
@@ -212,7 +212,7 @@ namespace TarodevController {
         private void OnDrawGizmos() {
             // Bounds
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireCube(transform.position + _characterBounds.center, _characterBounds.size);
+            Gizmos.DrawWireCube(transform.position + characterBounds.center, characterBounds.size);
 
             // Rays
             if (!Application.isPlaying) {
@@ -231,7 +231,7 @@ namespace TarodevController {
             // Draw the future position. Handy for visualizing gravity
             Gizmos.color = Color.red;
             var move = new Vector3(_currentHorizontalSpeed, _currentVerticalSpeed) * Time.deltaTime;
-            Gizmos.DrawWireCube(transform.position + move, _characterBounds.size);
+            Gizmos.DrawWireCube(transform.position + move, characterBounds.size);
 
         }
 
@@ -303,7 +303,7 @@ namespace TarodevController {
 
                 if (nearestHitDown.HasValue)
                 {
-                    var y = nearestHitDown.Value.collider.bounds.max.y + _characterBounds.size.y / 2 + edgeDetectionOffset;
+                    var y = nearestHitDown.Value.collider.bounds.max.y + characterBounds.size.y / 2 + edgeDetectionOffset;
                     transform.position = new Vector2(transform.position.x, y);
                 }
             }
@@ -386,7 +386,7 @@ namespace TarodevController {
             var furthestPoint = pos + move;
 
             // check furthest movement. If nothing hit, move and don't do extra checks
-            var hit = Physics2D.OverlapBox(furthestPoint, _characterBounds.size, 0, _groundLayer);
+            var hit = Physics2D.OverlapBox(furthestPoint, characterBounds.size, 0, _groundLayer);
             if (!hit || hit.isTrigger) {
                 transform.position += move;
                 return;
@@ -399,7 +399,7 @@ namespace TarodevController {
                 var t = (float)i / _freeColliderIterations;
                 var posToTry = Vector2.Lerp(pos, furthestPoint, t);
 
-                var overlap = Physics2D.OverlapBox(posToTry, _characterBounds.size, 0, _groundLayer);
+                var overlap = Physics2D.OverlapBox(posToTry, characterBounds.size, 0, _groundLayer);
                 if (overlap && !overlap.isTrigger) {
                     transform.position = positionToMoveTo;
 

@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f86fc69ab38d604ebbea4c8f5f6fad3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstScene: Stark
+  firstScene: Nivel
 --- !u!1 &1501487453
 GameObject:
   m_ObjectHideFlags: 0
