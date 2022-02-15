@@ -39,6 +39,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Fondo
+    uniqueID: 1429143393
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Mapa
+    uniqueID: 3340046949
+    locked: 0
+  - name: Objetos
+    uniqueID: 1287644667
+    locked: 0
+  - name: Jugador
+    uniqueID: 4002473783
     locked: 0

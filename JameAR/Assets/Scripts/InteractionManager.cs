@@ -14,6 +14,10 @@ public class InteractionManager : MonoBehaviour
     bool isSoul;
     [SerializeField]
     GameObject aliveVersion, soulVersion;
+    [SerializeField]
+    AudioClip aliveMusic, soulMusic;
+    [SerializeField]
+    AudioSource audioSrc;
 
     public bool IsSoul
     {
@@ -105,11 +109,16 @@ public class InteractionManager : MonoBehaviour
                 {
                     aliveVersion.SetActive(false);
                     soulVersion.SetActive(true);
+                    audioSrc.clip = soulMusic;
+                    audioSrc.Play();
+
                 }
                 else
                 {
                     soulVersion.SetActive(false);
                     aliveVersion.SetActive(true);
+                    audioSrc.clip = aliveMusic;
+                    audioSrc.Play();
                 }
 
                 PlayerRespawn.Instance.Respawn();

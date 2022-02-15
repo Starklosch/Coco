@@ -8,6 +8,8 @@ public class PauseScript : MonoBehaviour
     KeyCode pauseKey;
     [SerializeField]
     GameObject pauseScreen;
+    [SerializeField]
+    AudioSource audioSrc;
 
     bool pause = false;
     TarodevController.PlayerController controller;
@@ -39,12 +41,14 @@ public class PauseScript : MonoBehaviour
         {
             pauseScreen.SetActive(true);
             controller.enabled = false;
+            audioSrc.enabled = false;
             im.enabled = false;
         }
         else
         {
             pauseScreen.SetActive(false);
             controller.enabled = true;
+            audioSrc.enabled = true;
             im.enabled = true;
         }
     }

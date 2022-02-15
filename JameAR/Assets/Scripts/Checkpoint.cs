@@ -24,7 +24,6 @@ public class Checkpoint : MonoBehaviour, Interactable
                 if (ActiveMortal)
                 {
                     Debug.LogWarning("Active checkpoint already set. May be there is another Checkpoint set to default");
-                    return;
                 }
                 ActiveMortal = this;
                 break;
@@ -32,7 +31,6 @@ public class Checkpoint : MonoBehaviour, Interactable
                 if (ActiveHell)
                 {
                     Debug.LogWarning("Active checkpoint already set. May be there is another Checkpoint set to default");
-                    return;
                 }
                 ActiveHell = this;
                 break;
