@@ -5,25 +5,8 @@ using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    //[SerializeField]
-    //bool _dead;
-    //public bool Dead
-    //{
-    //    get => _dead;
-    //    set
-    //    {
-    //        if (value == _dead)
-    //            return;
-
-    //        if (value)
-    //            Death();
-    //        else
-    //            Respawn();
-
-    //        _dead = value;
-
-    //    }
-    //}
+    [SerializeField]
+    ParticleSystem respawnParticles;
 
     static PlayerRespawn _instance;
     public static PlayerRespawn Instance
@@ -41,6 +24,8 @@ public class PlayerRespawn : MonoBehaviour
         }
 
         _instance = this;
+
+        Respawn();
     }
 
     public void Respawn()
@@ -64,6 +49,8 @@ public class PlayerRespawn : MonoBehaviour
                     break;
                 }
             }
+
+        respawnParticles.Play();
     }
 
     public void Death()

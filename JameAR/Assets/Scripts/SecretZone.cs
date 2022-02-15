@@ -8,12 +8,12 @@ public class SecretZone : MonoBehaviour, Interactable
 
     private void Start()
     {
-        target.SetActive(false);
+        target.SetActive(true);
     }
 
     public void OnPlayerFar(Transform player)
     {
-        target.SetActive(false);
+        target.SetActive(true);
     }
 
     public bool OnPlayerInteract(Transform player)
@@ -23,6 +23,6 @@ public class SecretZone : MonoBehaviour, Interactable
 
     public void OnPlayerNear(Transform player)
     {
-        target.SetActive(true);
+        target.SetActive(false);
     }
 }

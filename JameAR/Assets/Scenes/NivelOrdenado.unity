@@ -3340,6 +3340,7 @@ MonoBehaviour:
   followObject: {fileID: 1461023128}
   followOffset: {x: 3, y: 3}
   speed: 12
+  maxTime: 1
 --- !u!1001 &1436371230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4154,15 +4155,15 @@ Transform:
   - {fileID: 334135866}
   - {fileID: 1844445252}
   - {fileID: 2049041649}
-  - {fileID: 856061555}
-  - {fileID: 1540598828}
-  - {fileID: 2094324043}
   - {fileID: 664231838}
-  - {fileID: 220109485}
+  - {fileID: 693612927}
+  - {fileID: 1533775143}
+  - {fileID: 1540598828}
   - {fileID: 1561131186}
   - {fileID: 2005767123}
-  - {fileID: 1533775143}
-  - {fileID: 693612927}
+  - {fileID: 2094324043}
+  - {fileID: 220109485}
+  - {fileID: 856061555}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5352,6 +5353,34 @@ PrefabInstance:
       propertyPath: aliveVersion
       value: 
       objectReference: {fileID: 2073445703}
+    - target: {fileID: 2481493811745184130, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.9768793
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481493811745184130, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.702
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481493811745184130, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221969172984918066, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.b
+      value: 0.9768793
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221969172984918066, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.g
+      value: 0.702
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221969172984918066, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_Colors.m_SelectedColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4604368396077205518, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5592975259288520576, guid: 83212c059ebd96c46bbacf30ae96e6b1, type: 3}
       propertyPath: m_RootOrder
       value: 2

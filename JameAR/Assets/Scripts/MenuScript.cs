@@ -8,12 +8,6 @@ public class MenuScript : MonoBehaviour
     [SerializeField]
     string firstScene;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public void Play()
     {
         SceneManager.LoadSceneAsync(firstScene);

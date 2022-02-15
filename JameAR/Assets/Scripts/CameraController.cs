@@ -7,14 +7,13 @@ public class CameraController : MonoBehaviour
     public GameObject followObject;
     public Vector2 followOffset;
     public float speed = 3f;
+    public float maxTime = 1f;
     private Vector2 threshold;
-    private TarodevController.PlayerController rb;
 
     // Start is called before the first frame update
     void Start()
     {
         threshold = calculateThreshold();
-        rb = followObject.GetComponent<TarodevController.PlayerController>();
     }
 
     // Update is called once per frame
@@ -33,8 +32,14 @@ public class CameraController : MonoBehaviour
         {
             newPosition.y = follow.y;
         }
-        float moveSpeed = rb.Velocity.magnitude > speed ? rb.Velocity.magnitude : speed;
-        transform.position = Vector3.MoveTowards(transform.position, newPosition, moveSpeed * Time.deltaTime);
+
+        var distance = Vector2.Distance(transform.position, newPosition);
+        var time = distance / speed;
+
+        if (time > maxTime)
+            transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime / maxTime);
+        else
+            transform.position = Vector3.MoveTowards(transform.position, newPosition, speed * Time.deltaTime);
     }
     private Vector3 calculateThreshold()
     {
